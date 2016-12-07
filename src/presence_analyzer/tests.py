@@ -150,14 +150,14 @@ class PresenceAnalyzerUtilsTestCase(unittest.TestCase):
         """
         Test interval
         """
-        testData = utils.interval(
-            datetime.time(12, 0, 20), datetime.time(13, 0, 20)
+        self.assertEqual(
+            utils.interval(datetime.time(12, 0, 20), datetime.time(13, 0, 20)),
+            3600,
         )
-        self.assertEqual(testData, 3600)
-        testData = utils.interval(
-            datetime.time(0, 0, 0), datetime.time(0, 0, 0)
+        self.assertEqual(
+            utils.interval(datetime.time(0, 0, 0), datetime.time(0, 0, 0)),
+            0,
         )
-        self.assertEqual(testData, 0)
 
     def test_mean(self):
         """
