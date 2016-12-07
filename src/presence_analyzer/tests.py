@@ -163,7 +163,7 @@ class PresenceAnalyzerUtilsTestCase(unittest.TestCase):
         """
         Test second_since_midnight
         """
-        self.assertEqual(
+        self.assertAlmostEqual(
             utils.mean([12, 4, 1222, 1, 55, 23, 423, 1]), 217.625
         )
         self.assertEqual(
