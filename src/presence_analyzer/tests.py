@@ -89,7 +89,6 @@ class PresenceAnalyzerUtilsTestCase(unittest.TestCase):
     def test_group_by_weekday(self):
         """
         Test group_by_weekday
-        the third test should cause ValueError
         """
         testData = {
             'testUser1': {
@@ -116,23 +115,12 @@ class PresenceAnalyzerUtilsTestCase(unittest.TestCase):
                     'end': datetime.time(16, 30, 0),
                 }
             },
-            'testUser3': {
-                datetime.date(2013, 11, 13): {
-                    'start': datetime.time(8, 30, 0),
-                    'end': datetime.time(16, 30, 0),
-                },
-                datetime.date(2013, 13, 15): {
-                    'start': datetime.time(8, 30, 0),
-                    'end': datetime.time(16, 30, 0),
-                }
-            },
-            'testUser4': {}
+            'testUser3': {}
         }
 
         testResult = utils.group_by_weekday(testData['testUser1'])
         testResult2 = utils.group_by_weekday(testData['testUser2'])
         testResult3 = utils.group_by_weekday(testData['testUser3'])
-        testResult4 = utils.group_by_weekday(testData['testUser4'])
 
         self.assertListEqual(
             testResult, [[], [39600], [27000], [], [], [], []]
@@ -141,16 +129,12 @@ class PresenceAnalyzerUtilsTestCase(unittest.TestCase):
             testResult2, [[], [], [28800], [28800], [], [], [30600]]
         )
         self.assertListEqual(
-            testResult3, [[], [], [28800], [28800], [], [], []]
-        )
-        self.assertListEqual(
-            testResult4, 0
+            testResult3, [[], [], [], [], [], [], []]
         )
 
     def test_seconds_since_midnight(self):
         """
         Test second_since_midnight
-        the third test should cause ValueError
         """
         self.assertEqual(
             utils.seconds_since_midnight(datetime.time(1, 0, 0)), 3600
@@ -159,13 +143,12 @@ class PresenceAnalyzerUtilsTestCase(unittest.TestCase):
             utils.seconds_since_midnight(datetime.time(1, 2, 3)), 3723
         )
         self.assertEqual(
-            utils.seconds_since_midnight(datetime.time(24, 0, 0)), 0
+            utils.seconds_since_midnight(datetime.time(0, 0, 0)), 0
         )
 
     def test_interval(self):
         """
-        Test second_since_midnight
-        the third test should cause ValueError
+        Test interval
         """
         testData = utils.interval(
             datetime.time(12, 0, 20), datetime.time(13, 0, 20)
@@ -175,17 +158,10 @@ class PresenceAnalyzerUtilsTestCase(unittest.TestCase):
             datetime.time(0, 0, 0), datetime.time(0, 0, 0)
         )
         self.assertEqual(testData, 0)
-        testData = utils.interval(
-            datetime.time(142, 0, 0), datetime.time(0, 0, 0)
-        )
-        self.assertEqual(
-            testData, 0
-        )
 
     def test_mean(self):
         """
         Test second_since_midnight
-        all should pass
         """
         self.assertEqual(
             utils.mean([12, 4, 1222, 1, 55, 23, 423, 1]), 217.625
