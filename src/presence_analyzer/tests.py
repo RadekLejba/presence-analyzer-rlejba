@@ -128,55 +128,74 @@ class PresenceAnalyzerUtilsTestCase(unittest.TestCase):
             },
             'testUser4': {}
         }
+
         testResult = utils.group_by_weekday(testData['testUser1'])
-        self.assertEqual(testResult, [[], [39600], [27000], [], [], [], []])
-        testResult = utils.group_by_weekday(testData['testUser2'])
-        self.assertEqual(testResult, [[], [], [28800],
-                         [28800], [], [], [30600]])
-        testResult = utils.group_by_weekday(testData['testUser3'])
-        self.assertEqual(testResult, [[], [], [28800],
-                         [28800], [], [], []])
-        testResult = utils.group_by_weekday(testData['testUser4'])
-        self.assertEqual(testResult, 0)
+        testResult2 = utils.group_by_weekday(testData['testUser2'])
+        testResult3 = utils.group_by_weekday(testData['testUser3'])
+        testResult4 = utils.group_by_weekday(testData['testUser4'])
+
+        self.assertListEqual(
+            testResult, [[], [39600], [27000], [], [], [], []]
+        )
+        self.assertListEqual(
+            testResult2, [[], [], [28800], [28800], [], [], [30600]]
+        )
+        self.assertListEqual(
+            testResult3, [[], [], [28800], [28800], [], [], []]
+        )
+        self.assertListEqual(
+            testResult4, 0
+        )
 
     def test_seconds_since_midnight(self):
         """
         Test second_since_midnight
         the third test should cause ValueError
         """
-        testData = utils.seconds_since_midnight(datetime.time(1, 0, 0))
-        self.assertEqual(testData, 3600)
-        testData = utils.seconds_since_midnight(datetime.time(1, 2, 3))
-        self.assertEqual(testData, 3723)
-        testData = utils.seconds_since_midnight(datetime.time(24, 0, 0))
-        self.assertEqual(testData, 0)
+        self.assertEqual(
+            utils.seconds_since_midnight(datetime.time(1, 0, 0)), 3600
+        )
+        self.assertEqual(
+            utils.seconds_since_midnight(datetime.time(1, 2, 3)), 3723
+        )
+        self.assertEqual(
+            utils.seconds_since_midnight(datetime.time(24, 0, 0)), 0
+        )
 
     def test_interval(self):
         """
         Test second_since_midnight
         the third test should cause ValueError
         """
-        testData = utils.interval(datetime.time(12, 0, 20),
-                                  datetime.time(13, 0, 20))
+        testData = utils.interval(
+            datetime.time(12, 0, 20), datetime.time(13, 0, 20)
+        )
         self.assertEqual(testData, 3600)
-        testData = utils.interval(datetime.time(0, 0, 0),
-                                  datetime.time(0, 0, 0))
+        testData = utils.interval(
+            datetime.time(0, 0, 0), datetime.time(0, 0, 0)
+        )
         self.assertEqual(testData, 0)
-        testData = utils.interval(datetime.time(142, 0, 0),
-                                  datetime.time(0, 0, 0))
-        self.assertEqual(testData, 0)
+        testData = utils.interval(
+            datetime.time(142, 0, 0), datetime.time(0, 0, 0)
+        )
+        self.assertEqual(
+            testData, 0
+        )
 
     def test_mean(self):
         """
         Test second_since_midnight
         all should pass
         """
-        testData = utils.mean([12, 4, 1222, 1, 55, 23, 423, 1])
-        self.assertEqual(testData, 217.625)
-        testData = utils.mean([])
-        self.assertEqual(testData, 0)
-        testData = utils.mean([12, 2, 1, 5, 1])
-        self.assertIsInstance(testData, float)
+        self.assertEqual(
+            utils.mean([12, 4, 1222, 1, 55, 23, 423, 1]), 217.625
+        )
+        self.assertEqual(
+            utils.mean([]), 0
+        )
+        self.assertAlmostEqual(
+            utils.mean([12, 2, 1, 5, 1]), 4.2
+        )
 
 
 def suite():
