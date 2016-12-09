@@ -80,9 +80,9 @@
     </script>
     <script type="text/javascript">
         function parseInterval(value) {
-                var result = new Date(1,1,1);
-                result.setMilliseconds(value*1000);
-                return result;
+            var result = new Date(1,1,1);
+            result.setMilliseconds(value*1000);
+            return result;
         }
 
         (function($) {
@@ -107,7 +107,6 @@
                                 value[1] = new Date(parseInterval(value[1]));
                                 value[2] = new Date(parseInterval(value[2]));
                             });
-                            console.log(result);
                             var data = new google.visualization.DataTable();
                             data.addColumn('string', 'Weekday');
                             data.addColumn({ type: 'datetime', id: 'Start' });

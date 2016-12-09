@@ -90,7 +90,7 @@ def presence_start_end_view(user_id):
 
     weekdays = group_by_start_end(data[user_id])
     result = [
-        (calendar.day_abbr[weekday], mean(startEnd[0]), mean(startEnd[1]))
-        for weekday, startEnd in enumerate(weekdays)
+        (calendar.day_abbr[weekday], mean(start_end[0]), mean(start_end[1]))
+        for weekday, start_end in enumerate(weekdays)
     ]
     return result

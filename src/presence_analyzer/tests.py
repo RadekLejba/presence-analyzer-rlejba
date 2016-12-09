@@ -175,64 +175,33 @@ class PresenceAnalyzerUtilsTestCase(unittest.TestCase):
 
     def test_group_by_start_end(self):
         """
-        Test second_group_by_start_end
+        Test group_by_start_end
         """
-        testData = {
-            'testUser1': {
-                datetime.date(2013, 1, 1): {
-                    'start': datetime.time(6, 0, 0),
-                    'end': datetime.time(17, 00, 0),
-                },
-                datetime.date(2013, 10, 2): {
-                    'start': datetime.time(8, 30, 0),
-                    'end': datetime.time(16, 00, 0),
-                }
-            },
-            'testUser2': {
-                datetime.date(2013, 9, 22): {
-                    'start': datetime.time(9, 0, 0),
-                    'end': datetime.time(17, 30, 0),
-                },
-                datetime.date(2013, 9, 26): {
-                    'start': datetime.time(8, 30, 0),
-                    'end': datetime.time(16, 30, 0),
-                },
-                datetime.date(2012, 10, 2): {
-                    'start': datetime.time(8, 30, 0),
-                    'end': datetime.time(16, 30, 0),
-                },
-                datetime.date(2012, 10, 4): {
-                    'start': datetime.time(8, 30, 0),
-                    'end': datetime.time(16, 30, 0),
-                }
-            },
-            'testUser3': {}
-        }
-
-        testResult = utils.group_by_start_end(testData['testUser1'])
-        testResult2 = utils.group_by_start_end(testData['testUser2'])
-        testResult3 = utils.group_by_start_end(testData['testUser3'])
+        testResult = utils.group_by_start_end(utils.get_data()[10])
+        testResult2 = utils.group_by_start_end(utils.get_data()[11])
+        testResult3 = utils.group_by_start_end([])
 
         self.assertListEqual(
             testResult, [
                 [[], []],
-                [[21600], [61200]],
-                [[30600], [57600]],
-                [[], []],
+                [[34745], [64792]],
+                [[33592], [58057]],
+                [[38926], [62631]],
                 [[], []],
                 [[], []],
                 [[], []]
             ]
+
         )
         self.assertListEqual(
             testResult2, [
+                [[33134], [57257]],
+                [[33590], [50154]],
+                [[33206], [58527]],
+                [[37116, 34088], [60085, 57087]],
+                [[47816], [54242]],
                 [[], []],
-                [[30600], [59400]],
                 [[], []],
-                [[30600, 30600], [59400, 59400]],
-                [[], []],
-                [[], []],
-                [[32400], [63000]]
             ]
         )
         self.assertListEqual(

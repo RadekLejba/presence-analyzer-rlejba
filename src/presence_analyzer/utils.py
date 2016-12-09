@@ -106,17 +106,9 @@ def mean(items):
 
 def group_by_start_end(items):
     """
-    Calculates arithmetic mean for start-end hours of each day of the week.
+    Groups given items for start-end hours of each day of the week.
     """
-    result = [
-        [[], []],
-        [[], []],
-        [[], []],
-        [[], []],
-        [[], []],
-        [[], []],
-        [[], []]
-    ]  # one list for every day in week and 2 sublists for start and end values
+    result = [[[], []] for i in range(7)]
     for date in items:
         start = items[date]['start']
         end = items[date]['end']
