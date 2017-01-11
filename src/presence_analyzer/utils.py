@@ -152,7 +152,7 @@ def get_months():
                     data.append(date)
             except (ValueError, TypeError):
                 log.debug('Problem with line %d: ', i, exc_info=True)
-                
+
     return data
 
 
@@ -208,7 +208,8 @@ def group_by_start_end(items):
 
 def sum_of_specific_month(user_data, month):
     """
-    Gets data of given user and month and returns total time of user in given month.
+    Gets data of given user and month and
+    returns total time of user in given month.
     """
     result = 0
     for date in user_data:

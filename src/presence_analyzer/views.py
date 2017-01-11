@@ -108,12 +108,15 @@ def workers_of_the_month_view(month):
 
     for key in xml_data.keys():
         try:
-            result.append([xml_data[key]['user_name'], sum_of_specific_month(data[int(key)], month)])
+            result.append([
+                xml_data[key]['user_name'],
+                sum_of_specific_month(data[int(key)], month)
+            ])
         except KeyError:
             continue
-    result = heapq.nlargest(5, result, key=lambda e:e[1])
+    result = heapq.nlargest(5, result, key=lambda e: e[1])
 
-    if len(result) <5:
+    if len(result) < 5:
         for i in range(5 - len(result)):
             result.append(['nouser', 0])
     return result
