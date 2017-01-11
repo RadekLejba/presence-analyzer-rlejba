@@ -96,6 +96,16 @@ class PresenceAnalyzerUtilsTestCase(unittest.TestCase):
             datetime.time(9, 39, 5)
         )
 
+    def test_get_months(self):
+        """
+        Test get_months
+        """
+        data = utils.get_months()
+        self.assertIsInstance(data, list)
+        self.assertListEqual(
+            data, ['2013-09']
+        )
+
     def test_group_by_weekday(self):
         """
         Test group_by_weekday.
@@ -262,6 +272,20 @@ class PresenceAnalyzerUtilsTestCase(unittest.TestCase):
                 'user_name': 'Adrian K.',
                 'avatar': 'https://intranet.stxnext.pl/api/images/users/176'
             }
+        )
+
+    def test_group_by_specific_month(self):
+        """
+        Test group_by_Specific_month.
+        """
+        testData = utils.sum_of_specific_month(utils.get_data()[10], '2013-09')
+        testData2 = utils.sum_of_specific_month(utils.get_data()[11], '2013-09')
+
+        self.assertEqual(
+            testData, 78217
+        )
+        self.assertEqual(
+            testData2, 118402
         )
 
 
