@@ -12,15 +12,18 @@ from presence_analyzer.main import app
 from presence_analyzer.utils import (
     jsonify,
     get_data,
+    get_months,
     mean,
     group_by_weekday,
     group_by_start_end,
+    group_by_months,
     get_xml_data,
-    group_by_months
+    sum_of_specific_month
 )
 
 import locale
 import logging
+import heapq
 log = logging.getLogger(__name__)  # pylint: disable=invalid-name
 
 
@@ -63,6 +66,20 @@ def users_view():
     return sorted_data
 
 
+@app.route('/api/v1/months', methods=['GET'])
+@jsonify
+def month_view():
+    """
+    Month listing for dropdown.
+    """
+    data = get_months()
+    data = [
+        {'month': data.index(item), 'date': item}
+        for item in data
+    ]
+    return data
+
+
 @app.route('/api/v1/users/<int:user_id>', methods=['GET'])
 @jsonify
 def avatar_view(user_id):
@@ -71,6 +88,38 @@ def avatar_view(user_id):
     """
     data = get_xml_data()
     return data[str(user_id)]['avatar']
+
+
+@app.route('/api/v1/workers_of_the_month/<string:month>', methods=['GET'])
+@jsonify
+def workers_of_the_month_view(month):
+    """
+    Returns 5 workers with most worked hours in given month.
+    If result<5 then empy indexes are filled with ['nouser', 0].
+    """
+    result = []
+    month = month.encode('utf-8')
+    months = get_months()
+    data = get_data()
+    xml_data = get_xml_data()
+
+    if month not in months:
+        return 0
+
+    for key in xml_data.keys():
+        try:
+            result.append([
+                xml_data[key]['user_name'],
+                sum_of_specific_month(data[int(key)], month)
+            ])
+        except KeyError:
+            continue
+    result = heapq.nlargest(5, result, key=lambda e: e[1])
+
+    if len(result) < 5:
+        for i in range(5 - len(result)):
+            result.append(['nouser', 0])
+    return result
 
 
 @app.route('/api/v1/mean_time_weekday/<int:user_id>', methods=['GET'])

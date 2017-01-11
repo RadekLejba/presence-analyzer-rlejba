@@ -103,6 +103,59 @@ def get_data():
     return data
 
 
+def get_xml_data():
+    """
+    Gets data from xml file and groups it like this:
+    {
+        user_id : {'user_name': user_name, 'avatar': user_avatar_source}
+    }
+    """
+    xml_data = {}
+
+    with open(app.config['DATA_XML'], 'r') as xmlfile:
+        tree = etree.parse(xmlfile)
+        server = tree.find('server')
+        server_data = '{}://{}'.format(
+            server.find('protocol').text,
+            server.find('host').text
+        )
+
+        users = tree.find('users')
+        users = users.findall('user')
+
+        for user in users:
+            user_id = user.get('id')
+            user_name = user.find('name').text
+            user_avatar = user.find('avatar').text
+            avatar = '{}{}'.format(server_data, user_avatar)
+            xml_data[user_id] = {'user_name': user_name, 'avatar': avatar}
+
+    return xml_data
+
+
+def get_months():
+    """
+    Extracts only aviable months from CSV file for dropdown.
+    """
+    data = []
+    with open(app.config['DATA_CSV'], 'r') as csvfile:
+        presence_reader = csv.reader(csvfile, delimiter=',')
+        for i, row in enumerate(presence_reader):
+            if len(row) != 4:
+                # ignore header and footer lines
+                continue
+            try:
+                date = row[1][:7]
+                if date in data:
+                    continue
+                else:
+                    data.append(date)
+            except (ValueError, TypeError):
+                log.debug('Problem with line %d: ', i, exc_info=True)
+                
+    return data
+
+
 def group_by_weekday(items):
     """
     Groups presence entries by weekday.
@@ -153,6 +206,20 @@ def group_by_start_end(items):
     return result
 
 
+def sum_of_specific_month(user_data, month):
+    """
+    Gets data of given user and month and returns total time of user in given month.
+    """
+    result = 0
+    for date in user_data:
+        if(date.strftime("%Y-%m") == month):
+            start = user_data[date]['start']
+            end = user_data[date]['end']
+            time = interval(start, end)
+            result += time
+    return result
+
+
 def group_by_months(items):
     """
     Groups given items by each month from the start of work.
@@ -185,33 +252,3 @@ def group_by_months(items):
             result[key] = time
 
     return result
-
-
-def get_xml_data():
-    """
-    Gets data from xml file and groups it like this:
-    {
-        user_id : {'user_name': user_name, 'avatar': user_avatar_source}
-    }
-    """
-    xml_data = {}
-
-    with open(app.config['DATA_XML'], 'r') as xmlfile:
-        tree = etree.parse(xmlfile)
-        server = tree.find('server')
-        server_data = '{}://{}'.format(
-            server.find('protocol').text,
-            server.find('host').text
-        )
-
-        users = tree.find('users')
-        users = users.findall('user')
-
-        for user in users:
-            user_id = user.get('id')
-            user_name = user.find('name').text
-            user_avatar = user.find('avatar').text
-            avatar = '{}{}'.format(server_data, user_avatar)
-            xml_data[user_id] = {'user_name': user_name, 'avatar': avatar}
-
-    return xml_data
