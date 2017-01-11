@@ -4,7 +4,7 @@ body {
 }
 
 #main {
-    width: 810px;
+    width: 904px;
     margin: 2em auto;
     padding: 0 2em;
 }
@@ -48,7 +48,7 @@ body {
     background: #eee;
     padding: 0.24em 1em;
     color: #00c;
-    width: 8em;
+    width: 12em;
     text-align: center;
 }
 
